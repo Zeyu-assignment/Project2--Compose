@@ -1,0 +1,66 @@
+# reference https://docs.docker.com/reference/compose-file/
+# reference https://www.tiuweehan.com/blog/2020-09-10-docker-in-jenkins-in-docker/
+version: "3.7"
+
+services:
+  dind:
+    # Define docker dind image.
+    image: docker:dind
+    container_name: dind
+    privileged: true
+    user: root
+    expose:
+      - 2376
+    # Join the network.  
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    # This environment is to set tls certificate. Dind will generate the certificate
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      # this volume is to save the CA.
+      - docker-certs-ca:/certs/ca
+      # this volume is to save the client certivicate.
+      - docker-certs-client:/certs/client
+      # this volume is to save the docker cache
+      - docker-layer-cache:/var/lib/docker
+    
+
+  jenkins:
+    # Define Jenkins image
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
+    user: root
+    # Join the network
+    networks:
+      - jenkins
+    environment:
+      # Using TCP to connect the remote docker host 
+      DOCKER_HOST: "tcp://docker:2376"
+      # Set the client certificate path as the previous set by dind
+      DOCKER_CERT_PATH: /certs/client
+      # Enable TLS
+      DOCKER_TLS_VERIFY: 1
+    volumes:
+      - docker-certs-client:/certs/client:ro
+      # Set jenkins home
+      - jenkins-home:/var/jenkins_home
+      - /usr/bin/docker:/usr/bin/docker
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    depends_on:
+      - dind
+
+# Create the volumes
+volumes:
+  docker-certs-ca:
+  docker-certs-client:
+  jenkins-home:
+  docker-layer-cache:
+# Create the networks
+networks:
+  jenkins:
+
