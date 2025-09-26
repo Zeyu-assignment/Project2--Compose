@@ -26,7 +26,7 @@ services:
       - docker-certs-client:/certs/client
       # this volume is to save the docker cache
       - docker-layer-cache:/var/lib/docker
-      # Mount jenkins home, because jenkins will use dind to build the docker agent, the agent will access this directory.
+      # Mount jenkins home, because jenkins will use dind to build the docker agent, the agent will access this directory. Failing to mount will lead to pipline failure.
       - jenkins-home:/var/jenkins_home
     
 
