@@ -31,7 +31,7 @@ services:
     
 
   jenkins:
-    # Define Jenkins image
+    # Define Jenkins image.
     image: jenkins/jenkins:lts-jdk11
     container_name: jenkins
     user: root
@@ -39,7 +39,7 @@ services:
     networks:
       - jenkins
     environment:
-      # Using TCP to connect the remote docker host 
+      # Using TCP to connect the remote docker host. 
       DOCKER_HOST: "tcp://docker:2376"
       # Set the client certificate path as the previous set by dind
       DOCKER_CERT_PATH: /certs/client
