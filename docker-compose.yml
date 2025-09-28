@@ -22,11 +22,11 @@ services:
     volumes:
       # This volume is to save the CA.
       - docker-certs-ca:/certs/ca
-      # This volume is to save the client certivicate.
+      # This volume is to save the client certificate.
       - docker-certs-client:/certs/client
       # This volume is to save the docker cache
       - docker-layer-cache:/var/lib/docker
-      # Mount jenkins home, because jenkins will use dind to build the docker agent, the agent will access this directory. Failing to mount will lead to pipline failure.
+      # Mount jenkins home, because jenkins will use dind to build the docker agent, the agent will access this directory. Failing to mount will lead to pipeline failure.
       - jenkins-home:/var/jenkins_home
     
 
