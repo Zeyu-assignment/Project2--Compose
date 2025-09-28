@@ -16,7 +16,7 @@ services:
       jenkins:
         aliases:
           - docker
-    # This environment is to set tls certificate. Dind will generate the certificate
+    # This environment is to set the tls certificate. Dind will generate the certificate
     environment:
       DOCKER_TLS_CERTDIR: /certs
     volumes:
